@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,14 +19,26 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static com.szafrani.branchlocater.Utils.verifyPermissions;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements Callback {
     private final String TAG = getClass().getSimpleName();
-    private static ArrayList<com.szafrani.branchlocater.Location> branchList = new ArrayList<com.szafrani.branchlocater.Location>();
-    private static BranchAdapter adapter;
+    private ArrayList<com.szafrani.branchlocater.Location> branchList = new ArrayList<com.szafrani.branchlocater.Location>();
+    private BranchAdapter adapter;
     private ListView listView;
 
     @Nullable
@@ -42,7 +55,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
-                final String item = (String) parent.getItemAtPosition(position);
+                // Create new fragment and transaction
+                DetailFragment detailFragment = new DetailFragment(branchList.get(position));
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                //transaction.show(newFragment);
+
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
+                transaction.replace(R.id.container, detailFragment);
+                transaction.addToBackStack(null);
+                transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                transaction.commit();
+
             }
 
         });
@@ -85,25 +109,84 @@ public class HomeFragment extends Fragment {
         Log.e(TAG, "Running fetchData.");
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
-        Service service = new Service();
-        service.runLocater(latitude, longitude);
 
+        OkHttpClient client = new OkHttpClient();;
+        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://m.chase.com/PSRWeb/location/list.action").newBuilder();
+        urlBuilder.addQueryParameter("lat", Double.toString(latitude));
+        urlBuilder.addQueryParameter("lng", Double.toString(longitude));
+        String url = urlBuilder.build().toString();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(this);
     }
 
 
-    public void updateListView(){
-
-    }
-
-    public static void setBranchList(ArrayList<com.szafrani.branchlocater.Location> newBranchList) {
+    public void setBranchList(ArrayList<com.szafrani.branchlocater.Location> newBranchList) {
         branchList = newBranchList;
-        adapter.clear();
         adapter.locations = branchList;
-        for (int i =0; i< branchList.size(); i++) {
-            adapter.add(branchList.get(i));
-        }
-        adapter.notifyDataSetChanged();
         Log.e("setBranchList", "the current BranchList: "+ branchList.toString());
 
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.clear();
+                for (int i =0; i< branchList.size(); i++) {
+                    adapter.add(branchList.get(i));
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+
+
+    @Override
+    public void onFailure(Call call, IOException e) {
+
+    }
+
+    @Override
+    public void onResponse(Call call, Response response) throws IOException {
+
+        String jsonString =  response.body().string();
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONArray jsonArray = jsonObject.getJSONArray("locations");
+            Log.e(TAG, "response to string: "+ jsonArray.toString());
+            ArrayList<com.szafrani.branchlocater.Location> locationList = new ArrayList<>();
+
+            String state;
+            String type;
+            String address;
+            String city;
+            String zip;
+            String name;
+            String bank;
+            String phone;
+
+            for(int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    JSONObject currentJSON = jsonArray.getJSONObject(i);
+                    state = currentJSON.getString("state");
+                    type = currentJSON.getString("locType");
+                    address = currentJSON.getString("address");
+                    city = currentJSON.getString("city");
+                    zip = currentJSON.getString("zip");
+                    name = currentJSON.getString("name");
+                    bank= currentJSON.getString("bank");
+                    phone = currentJSON.getString("phone");
+                    Log.e(TAG, "adding new location: "+ state+ ", " + type + ", " + address);
+
+                    locationList.add(new com.szafrani.branchlocater.Location(state, type, address, city, zip, name, bank, phone));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            setBranchList(locationList);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

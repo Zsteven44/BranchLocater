@@ -40,23 +40,25 @@ public class BranchAdapter extends ArrayAdapter {
         TextView zip = (TextView) convertView.findViewById(R.id.item_zipview);
         TextView phone = (TextView) convertView.findViewById(R.id.item_phoneview);
         // Populate the data into the template view using the data object
-        if(location.getName() !=null) {
-            name.setText(location.getName());
-        }
-        if(location.getState() !=null) {
-            state.setText(location.getState());
-        }
-        if(location.getAddress() !=null) {
-            address.setText(location.getAddress());
-        }
-        if(location.getCity() !=null) {
-            city.setText(location.getCity());
-        }
-        if(location.getZip() !=null) {
-            zip.setText(location.getZip());
-        }
-        if(location.getPhone() !=null) {
-            phone.setText(location.getPhone());
+        if (location !=null) {
+            if (location.getName() != null) {
+                name.setText(location.getName());
+            }
+            if (location.getState() != null) {
+                state.setText(location.getState());
+            }
+            if (location.getAddress() != null) {
+                address.setText(location.getAddress());
+            }
+            if (location.getCity() != null) {
+                city.setText(location.getCity());
+            }
+            if (location.getZip() != null) {
+                zip.setText(location.getZip());
+            }
+            if (location.getPhone() != null) {
+                phone.setText(location.getPhone());
+            }
         }
         // Return the completed view to render on screen
         return convertView;
