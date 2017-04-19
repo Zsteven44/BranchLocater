@@ -18,6 +18,7 @@ import android.widget.ListView;
 
 import com.szafrani.branchlocater.R;
 import com.szafrani.branchlocater.adapters.BranchAdapter;
+import com.szafrani.branchlocater.misc.DataService;
 import com.szafrani.branchlocater.misc.LocationPermissionUtil;
 
 import org.json.JSONArray;
@@ -37,6 +38,7 @@ import okhttp3.Response;
 
 public class HomeFragment extends Fragment implements Callback {
     private final String TAG = getClass().getSimpleName();
+    private DataService dataService;
     private ArrayList<com.szafrani.branchlocater.models.Location> branchList = new ArrayList<com.szafrani.branchlocater.models.Location>();
     private BranchAdapter adapter;
     private ListView listView;
@@ -66,11 +68,10 @@ public class HomeFragment extends Fragment implements Callback {
                 transaction.addToBackStack(null);
                 transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 transaction.commit();
-
             }
 
         });
-
+        dataService = new DataService();
         return rootView;
     }
 
