@@ -1,4 +1,4 @@
-package com.szafrani.branchlocater;
+package com.szafrani.branchlocater.misc;
 
 import android.location.Location;
 import android.location.LocationListener;

@@ -1,4 +1,4 @@
-package com.szafrani.branchlocater;
+package com.szafrani.branchlocater.adapters;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.szafrani.branchlocater.models.Location;
+import com.szafrani.branchlocater.R;
 
 import java.util.ArrayList;
 

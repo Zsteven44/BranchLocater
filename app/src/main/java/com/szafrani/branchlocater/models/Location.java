@@ -1,4 +1,4 @@
-package com.szafrani.branchlocater;
+package com.szafrani.branchlocater.models;
 
 
 import android.support.annotation.Nullable;

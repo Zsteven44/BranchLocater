@@ -1,15 +1,12 @@
-package com.szafrani.branchlocater;
+package com.szafrani.branchlocater.fragments;
 
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -18,6 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.szafrani.branchlocater.R;
+import com.szafrani.branchlocater.adapters.BranchAdapter;
+import com.szafrani.branchlocater.misc.LocationPermissionUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,11 +34,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static com.szafrani.branchlocater.Utils.verifyPermissions;
 
 public class HomeFragment extends Fragment implements Callback {
     private final String TAG = getClass().getSimpleName();
-    private ArrayList<com.szafrani.branchlocater.Location> branchList = new ArrayList<com.szafrani.branchlocater.Location>();
+    private ArrayList<com.szafrani.branchlocater.models.Location> branchList = new ArrayList<com.szafrani.branchlocater.models.Location>();
     private BranchAdapter adapter;
     private ListView listView;
 
@@ -74,32 +74,38 @@ public class HomeFragment extends Fragment implements Callback {
         return rootView;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+         LocationPermissionUtil.onReqPermissionsResult(requestCode, permissions, grantResults);
+        fetchLocation(false);
+
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.e(TAG, "Running fetchLocation.");
-        verifyPermissions(getActivity());
-        fetchLocation();
+        fetchLocation(true);
 
     }
 
-
-    public void fetchLocation() {
+    public void fetchLocation(final boolean requestIfNeeded) {
+        if (!LocationPermissionUtil.hasPermission(getContext())) {
+            Log.e(TAG, "Missing Location");
+            if (requestIfNeeded) {
+                LocationPermissionUtil.requestPermission(getActivity());
+            }
+            return;
+        }
 
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        // Define a listener that responds to location updates
-        LocationListener locationListener = new MyLocationListener();
-
         // Register the listener with the Location Manager to receive location updates
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+        locationManager.getAllProviders();
+        //noinspection MissingPermission permission checked above
         fetchData(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
-        // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 10, locationListener);
         Log.e(TAG, "GPS Enabled");
     }
 
@@ -110,7 +116,7 @@ public class HomeFragment extends Fragment implements Callback {
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
-        OkHttpClient client = new OkHttpClient();;
+        OkHttpClient client = new OkHttpClient();
         HttpUrl.Builder urlBuilder = HttpUrl.parse("https://m.chase.com/PSRWeb/location/list.action").newBuilder();
         urlBuilder.addQueryParameter("lat", Double.toString(latitude));
         urlBuilder.addQueryParameter("lng", Double.toString(longitude));
@@ -123,23 +129,22 @@ public class HomeFragment extends Fragment implements Callback {
     }
 
 
-    public void setBranchList(ArrayList<com.szafrani.branchlocater.Location> newBranchList) {
+    public void setBranchList(ArrayList<com.szafrani.branchlocater.models.Location> newBranchList) {
         branchList = newBranchList;
         adapter.locations = branchList;
-        Log.e("setBranchList", "the current BranchList: "+ branchList.toString());
+        Log.e("setBranchList", "the current BranchList: " + branchList.toString());
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 adapter.clear();
-                for (int i =0; i< branchList.size(); i++) {
+                for (int i = 0; i < branchList.size(); i++) {
                     adapter.add(branchList.get(i));
                 }
                 adapter.notifyDataSetChanged();
             }
         });
     }
-
 
 
     @Override
@@ -150,12 +155,12 @@ public class HomeFragment extends Fragment implements Callback {
     @Override
     public void onResponse(Call call, Response response) throws IOException {
 
-        String jsonString =  response.body().string();
+        String jsonString = response.body().string();
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             JSONArray jsonArray = jsonObject.getJSONArray("locations");
-            Log.e(TAG, "response to string: "+ jsonArray.toString());
-            ArrayList<com.szafrani.branchlocater.Location> locationList = new ArrayList<>();
+            Log.e(TAG, "response to string: " + jsonArray.toString());
+            ArrayList<com.szafrani.branchlocater.models.Location> locationList = new ArrayList<>();
 
             String state;
             String type;
@@ -166,7 +171,7 @@ public class HomeFragment extends Fragment implements Callback {
             String bank;
             String phone;
 
-            for(int i = 0; i < jsonArray.length(); i++) {
+            for (int i = 0; i < jsonArray.length(); i++) {
                 try {
                     JSONObject currentJSON = jsonArray.getJSONObject(i);
                     state = currentJSON.getString("state");
@@ -175,11 +180,11 @@ public class HomeFragment extends Fragment implements Callback {
                     city = currentJSON.getString("city");
                     zip = currentJSON.getString("zip");
                     name = currentJSON.getString("name");
-                    bank= currentJSON.getString("bank");
+                    bank = currentJSON.getString("bank");
                     phone = currentJSON.getString("phone");
-                    Log.e(TAG, "adding new location: "+ state+ ", " + type + ", " + address);
+                    Log.e(TAG, "adding new location: " + state + ", " + type + ", " + address);
 
-                    locationList.add(new com.szafrani.branchlocater.Location(state, type, address, city, zip, name, bank, phone));
+                    locationList.add(new com.szafrani.branchlocater.models.Location(state, type, address, city, zip, name, bank, phone));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -1,4 +1,4 @@
-package com.szafrani.branchlocater;
+package com.szafrani.branchlocater.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.szafrani.branchlocater.models.Location;
+import com.szafrani.branchlocater.R;
 
 public class DetailFragment extends Fragment{
     Location location;
