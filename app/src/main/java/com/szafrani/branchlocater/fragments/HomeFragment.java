@@ -18,7 +18,6 @@ import android.widget.ListView;
 
 import com.szafrani.branchlocater.R;
 import com.szafrani.branchlocater.adapters.BranchAdapter;
-import com.szafrani.branchlocater.misc.DataService;
 import com.szafrani.branchlocater.misc.LocationPermissionUtil;
 
 import org.json.JSONArray;
@@ -38,7 +37,7 @@ import okhttp3.Response;
 
 public class HomeFragment extends Fragment implements Callback {
     private final String TAG = getClass().getSimpleName();
-    private DataService dataService;
+
     private ArrayList<com.szafrani.branchlocater.models.Location> branchList = new ArrayList<com.szafrani.branchlocater.models.Location>();
     private BranchAdapter adapter;
     private ListView listView;
@@ -60,7 +59,7 @@ public class HomeFragment extends Fragment implements Callback {
                 // Create new fragment and transaction
                 DetailFragment detailFragment = new DetailFragment(branchList.get(position));
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                //transaction.show(newFragment);
+
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack
@@ -71,7 +70,6 @@ public class HomeFragment extends Fragment implements Callback {
             }
 
         });
-        dataService = new DataService();
         return rootView;
     }
 
@@ -156,6 +154,8 @@ public class HomeFragment extends Fragment implements Callback {
     @Override
     public void onResponse(Call call, Response response) throws IOException {
 
+        // on successful response, convert response to json string.
+        // create a list from json of the locations, along with important information.
         String jsonString = response.body().string();
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
