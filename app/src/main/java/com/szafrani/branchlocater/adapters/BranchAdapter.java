@@ -10,15 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.szafrani.branchlocater.models.Location;
 import com.szafrani.branchlocater.R;
+import com.szafrani.branchlocater.models.BranchLocation;
 
 import java.util.ArrayList;
 
 
 public class BranchAdapter extends ArrayAdapter {
     private final Context context;
-    public ArrayList<Location> locations = null;
+    public ArrayList<BranchLocation> branchLocations = null;
 
     public BranchAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);
@@ -29,7 +29,7 @@ public class BranchAdapter extends ArrayAdapter {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Location location = getItem(position);
+        BranchLocation branchLocation = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.listview, parent, false);
@@ -43,24 +43,24 @@ public class BranchAdapter extends ArrayAdapter {
         TextView zip = (TextView) convertView.findViewById(R.id.item_zipview);
         TextView phone = (TextView) convertView.findViewById(R.id.item_phoneview);
         // Populate the data into the template view using the data object
-        if (location !=null) {
-            if (location.getName() != null) {
-                name.setText(location.getName());
+        if (branchLocation !=null) {
+            if (branchLocation.getName() != null) {
+                name.setText(branchLocation.getName());
             }
-            if (location.getState() != null) {
-                state.setText(location.getState());
+            if (branchLocation.getState() != null) {
+                state.setText(branchLocation.getState());
             }
-            if (location.getAddress() != null) {
-                address.setText(location.getAddress());
+            if (branchLocation.getAddress() != null) {
+                address.setText(branchLocation.getAddress());
             }
-            if (location.getCity() != null) {
-                city.setText(location.getCity());
+            if (branchLocation.getCity() != null) {
+                city.setText(branchLocation.getCity());
             }
-            if (location.getZip() != null) {
-                zip.setText(location.getZip());
+            if (branchLocation.getZip() != null) {
+                zip.setText(branchLocation.getZip());
             }
-            if (location.getPhone() != null) {
-                phone.setText(location.getPhone());
+            if (branchLocation.getPhone() != null) {
+                phone.setText(branchLocation.getPhone());
             }
         }
         // Return the completed view to render on screen
@@ -68,10 +68,9 @@ public class BranchAdapter extends ArrayAdapter {
     }
 
     @Override
-    public Location getItem(int position) {
-        if (locations != null) {
-            Location item = locations.get(position);
-            return item;
+    public BranchLocation getItem(int position) {
+        if (branchLocations != null) {
+            return branchLocations.get(position);
         }
         return null;
     }

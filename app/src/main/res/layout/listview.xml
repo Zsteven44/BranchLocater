@@ -2,7 +2,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="10dp">
 
     <!-- Branch Name -->
     <TextView
@@ -10,13 +11,15 @@
         android:id="@+id/item_name"
         android:text="Branch Name: "
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_desc"/>
     <TextView
         android:layout_alignBottom="@id/item_name"
         android:layout_toRightOf="@id/item_name"
         android:id="@+id/item_nameview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_value" />
 
     <!-- State -->
     <TextView
@@ -24,13 +27,15 @@
         android:id="@+id/item_state"
         android:text="State: "
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_desc"/>
     <TextView
         android:layout_below="@id/item_name"
         android:layout_toRightOf="@id/item_state"
         android:id="@+id/item_stateview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_value"/>
 
     <!-- Address -->
     <TextView
@@ -38,13 +43,15 @@
         android:id="@+id/item_address"
         android:text="Address: "
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_desc"/>
     <TextView
         android:layout_below="@id/item_state"
         android:layout_toRightOf="@id/item_address"
         android:id="@+id/item_addressview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_value"/>
 
     <!-- City -->
     <TextView
@@ -52,13 +59,15 @@
         android:id="@+id/item_city"
         android:text="City: "
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_desc"/>
     <TextView
         android:layout_below="@id/item_address"
         android:layout_toRightOf="@id/item_city"
         android:id="@+id/item_cityview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_value" />
 
     <!-- Zip -->
     <TextView
@@ -66,13 +75,15 @@
         android:id="@+id/item_zip"
         android:text="Zip: "
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_desc"/>
     <TextView
         android:layout_below="@id/item_city"
         android:layout_toRightOf="@id/item_zip"
         android:id="@+id/item_zipview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_value" />
 
     <!-- Phone -->
     <TextView
@@ -80,13 +91,15 @@
         android:id="@+id/item_phone"
         android:text="Phone: "
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_desc"/>
     <TextView
         android:layout_below="@id/item_zip"
         android:layout_toRightOf="@id/item_phone"
         android:id="@+id/item_phoneview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        style="@style/field_value" />
 
 
 

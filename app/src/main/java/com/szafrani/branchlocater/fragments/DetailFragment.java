@@ -8,14 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.szafrani.branchlocater.models.Location;
+import com.szafrani.branchlocater.models.BranchLocation;
 import com.szafrani.branchlocater.R;
 
 public class DetailFragment extends Fragment{
-    Location location;
+    BranchLocation branchLocation;
 
-    public DetailFragment(Location location) {
-        this.location = location;
+    public DetailFragment(BranchLocation branchLocation) {
+        this.branchLocation = branchLocation;
 
     }
 
@@ -31,24 +31,24 @@ public class DetailFragment extends Fragment{
         TextView zip = (TextView) rootView.findViewById(R.id.item_zipview);
         TextView phone = (TextView) rootView.findViewById(R.id.item_phoneview);
         // Populate the data into the template view using the data object
-        if (location !=null) {
-            if (location.getName() != null) {
-                name.setText(location.getName());
+        if (branchLocation !=null) {
+            if (branchLocation.getName() != null) {
+                name.setText(branchLocation.getName());
             }
-            if (location.getState() != null) {
-                state.setText(location.getState());
+            if (branchLocation.getState() != null) {
+                state.setText(branchLocation.getState());
             }
-            if (location.getAddress() != null) {
-                address.setText(location.getAddress());
+            if (branchLocation.getAddress() != null) {
+                address.setText(branchLocation.getAddress());
             }
-            if (location.getCity() != null) {
-                city.setText(location.getCity());
+            if (branchLocation.getCity() != null) {
+                city.setText(branchLocation.getCity());
             }
-            if (location.getZip() != null) {
-                zip.setText(location.getZip());
+            if (branchLocation.getZip() != null) {
+                zip.setText(branchLocation.getZip());
             }
-            if (location.getPhone() != null) {
-                phone.setText(location.getPhone());
+            if (branchLocation.getPhone() != null) {
+                phone.setText(branchLocation.getPhone());
             }
         }
 

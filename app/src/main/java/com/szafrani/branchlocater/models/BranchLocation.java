@@ -3,7 +3,7 @@ package com.szafrani.branchlocater.models;
 
 import android.support.annotation.Nullable;
 
-public class Location {
+public class BranchLocation {
     private final String state;
     private final String type;
     private final String address;
@@ -13,14 +13,14 @@ public class Location {
     private final String bank;
     private final String phone;
 
-    public Location(@Nullable String state,
-                    @Nullable String type,
-                    @Nullable String address,
-                    @Nullable String city,
-                    @Nullable String zip,
-                    @Nullable String name,
-                    @Nullable String bank,
-                    @Nullable String phone) {
+    public BranchLocation(@Nullable String state,
+                          @Nullable String type,
+                          @Nullable String address,
+                          @Nullable String city,
+                          @Nullable String zip,
+                          @Nullable String name,
+                          @Nullable String bank,
+                          @Nullable String phone) {
         this.state = state;
         this.type = type;
         this.address = address;
