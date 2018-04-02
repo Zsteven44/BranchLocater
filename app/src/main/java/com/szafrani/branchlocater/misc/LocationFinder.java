@@ -17,6 +17,10 @@ import static android.content.ContentValues.TAG;
  */
 
 public class LocationFinder {
+    /*
+    The purpose of this class is to return a Location object that has the user's longitude and latitude.
+
+     */
     MainActivity activity;
     Location myLocation;
 
@@ -26,7 +30,7 @@ public class LocationFinder {
 
     public Location fetchLocation(final boolean requestIfNeeded) {
 
-        // Permission permission check
+        // Permission check
         if (!LocationPermissionUtil.hasPermission(activity)) {
             Log.e(TAG, "Missing BranchLocation, Permission not found.");
             LocationPermissionUtil.requestPermission(activity);

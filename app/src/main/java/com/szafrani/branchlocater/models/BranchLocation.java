@@ -3,6 +3,8 @@ package com.szafrani.branchlocater.models;
 
 import android.support.annotation.Nullable;
 
+import org.json.JSONObject;
+
 public class BranchLocation {
     private final String state;
     private final String type;
@@ -12,6 +14,7 @@ public class BranchLocation {
     private final String name;
     private final String bank;
     private final String phone;
+    private final JSONObject branchJson;
 
     public BranchLocation(@Nullable String state,
                           @Nullable String type,
@@ -20,7 +23,8 @@ public class BranchLocation {
                           @Nullable String zip,
                           @Nullable String name,
                           @Nullable String bank,
-                          @Nullable String phone) {
+                          @Nullable String phone,
+                          @Nullable JSONObject branchJson) {
         this.state = state;
         this.type = type;
         this.address = address;
@@ -29,6 +33,7 @@ public class BranchLocation {
         this.name = name;
         this.bank = bank;
         this.phone = phone;
+        this.branchJson = branchJson;
     }
 
     public String getState() {
@@ -85,6 +90,10 @@ public class BranchLocation {
         } else {
             return "";
         }
+    }
+
+    public JSONObject getBranchJson() {
+        return branchJson;
     }
 
     public String getPhone() {

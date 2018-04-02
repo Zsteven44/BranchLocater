@@ -47,13 +47,11 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, final View view,
                                     int position, long id) {
                 // Create new fragment and transaction
-                DetailFragment detailFragment = new DetailFragment(branchList.get(position));
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
 
                 // Replace whatever is in the fragment_container view with this fragment,
                 // and add the transaction to the back stack
-                transaction.replace(R.id.container, detailFragment);
+                transaction.replace(R.id.container, DetailFragment.newInstance(branchList.get(position).getBranchJson().toString()));
                 transaction.addToBackStack(null);
                 transaction.setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 transaction.commit();
@@ -85,7 +83,7 @@ public class HomeFragment extends Fragment {
     public void setBranchList(ArrayList<BranchLocation> newBranchList) {
         branchList = newBranchList;
         adapter.branchLocations = branchList;
-        getActivity().runOnUiThread(new Runnable() {
+        ( getActivity()).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 adapter.clear();

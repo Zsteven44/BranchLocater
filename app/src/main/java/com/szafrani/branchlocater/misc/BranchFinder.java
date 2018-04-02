@@ -25,6 +25,11 @@ import okhttp3.Response;
  */
 
 public class BranchFinder implements Callback{
+    /*
+    The purpose of this class is to send a request to the Chase endpoint with params from user's Location.
+    The response object's json will contain all nearby banks, which we parse into a BranchLocation model
+    and return to the fragment to display.
+     */
     private final String TAG = getClass().getSimpleName();
     private final HomeFragment homeFragment;
 
@@ -93,7 +98,7 @@ public class BranchFinder implements Callback{
                     phone = currentJSON.getString("phone");
                     Log.e(TAG, "adding new location: " + state + ", " + type + ", " + address);
 
-                    branchLocationList.add(new BranchLocation(state, type, address, city, zip, name, bank, phone));
+                    branchLocationList.add(new BranchLocation(state, type, address, city, zip, name, bank, phone, currentJSON));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

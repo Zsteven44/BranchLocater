@@ -11,7 +11,9 @@ import android.support.v4.content.PermissionChecker;
 import java.util.Arrays;
 
 public class LocationPermissionUtil {
-
+    /*
+    Tool for checking permissions needed to use app features, as described in the Android docs.
+     */
     public static final int REQUEST_PERMISSIONS = 1831;
     public static String[] PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
